@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Danh Sách Thực Tập Sinh - Chọn Mentor</title>
+  <!-- Bootstrap 5 CSS để giao diện đẹp, chuẩn và dễ tích hợp -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    .table thead th {
+      background-color: #f1f5f9;
+      color: #475569;
+      font-weight: 600;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    .table tbody tr {
+      transition: background-color 0.2s ease;
+    }
+    .table tbody tr:hover {
+      background-color: #f8fafc;
+    }
+    .row-changed {
+      background-color: #fffbeb !important;
+    }
+    .select-mentor {
+      min-width: 220px;
+    }
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1060;
+    }
+  </style>
+</head>
+<body class="py-4">
+  <div class="container">
+    <!-- Tiêu đề & Nút thao tác chung -->
+    <div class="card p-4 mb-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div>
+          <h4 class="mb-1 text-primary fw-bold">
+            <i class="bi bi-people-fill me-2"></i>Bảng Danh Sách Thực Tập Sinh
+          </h4>
+          <p class="text-muted mb-0 small">
+            Quản lý và phân công Mentor hướng dẫn cho từng thực tập sinh
+          </p>
+        </div>
+        <div class="d-flex gap-2">
+          <button id="btnSaveAll" class="btn btn-primary" onclick="saveAll()">
+            <i class="bi bi-floppy-fill me-1"></i> Lưu tất cả thay đổi
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bảng danh sách thực tập sinh -->
+    <div class="card p-0 overflow-hidden">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th class="text-center" style="width: 60px;">STT</th>
+              <th>Mã TTS</th>
+              <th>Họ và Tên</th>
+              <th>Vị trí thực tập</th>
+              <th>Trạng thái</th>
+              <th>Mentor phụ trách</th>
+              <th class="text-center" style="width: 120px;">Hành động</th>
+            </tr>
+          </thead>
+          <tbody id="internTableBody">
+            <!-- Hàng 1 -->
+            <tr data-id="TTS001">
+              <td class="text-center fw-semibold text-secondary">1</td>
+              <td><span class="badge bg-light text-dark border">TTS001</span></td>
+              <td>
+                <div class="fw-bold">Nguyễn Văn An</div>
+                <small class="text-muted">an.nguyen@email.com</small>
+              </td>
+              <td><span class="badge bg-primary-subtle text-primary border border-primary-subtle">Frontend Developer</span></td>
+              <td><span class="badge bg-success">Đang thực tập</span></td>
+              <td>
+                <select class="form-select form-select-sm select-mentor" onchange="onMentorChange('TTS001')">
+                  <option value="">-- Chưa phân công --</option>
+                  <option value="M01" selected>Trần Hoàng Nam (Senior Frontend)</option>
+                  <option value="M02">Lê Thị Mai (Tech Lead)</option>
+                  <option value="M03">Phạm Quốc Bảo (Senior Backend)</option>
+                  <option value="M04">Võ Hoài An (DevOps)</option>
+                </select>
+              </td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-outline-success" onclick="saveRow('TTS001')">
+                  <i class="bi bi-check-lg"></i> Lưu
+                </button>
+              </td>
+            </tr>
+
+            <!-- Hàng 2 -->
+            <tr data-id="TTS002">
+              <td class="text-center fw-semibold text-secondary">2</td>
+              <td><span class="badge bg-light text-dark border">TTS002</span></td>
+              <td>
+                <div class="fw-bold">Trần Thị Bích</div>
+                <small class="text-muted">bich.tran@email.com</small>
+              </td>
+              <td><span class="badge bg-info-subtle text-info-emphasis border border-info-subtle">Backend Developer</span></td>
+              <td><span class="badge bg-warning text-dark">Mới tiếp nhận</span></td>
+              <td>
+                <select class="form-select form-select-sm select-mentor" onchange="onMentorChange('TTS002')">
+                  <option value="">-- Chưa phân công --</option>
+                  <option value="M01">Trần Hoàng Nam (Senior Frontend)</option>
+                  <option value="M02">Lê Thị Mai (Tech Lead)</option>
+                  <option value="M03" selected>Phạm Quốc Bảo (Senior Backend)</option>
+                  <option value="M04">Võ Hoài An (DevOps)</option>
+                </select>
+              </td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-outline-success" onclick="saveRow('TTS002')">
+                  <i class="bi bi-check-lg"></i> Lưu
+                </button>
+              </td>
+            </tr>
+
+            <!-- Hàng 3 -->
+            <tr data-id="TTS003">
+              <td class="text-center fw-semibold text-secondary">3</td>
+              <td><span class="badge bg-light text-dark border">TTS003</span></td>
+              <td>
+                <div class="fw-bold">Lê Hoàng Cường</div>
+                <small class="text-muted">cuong.le@email.com</small>
+              </td>
+              <td><span class="badge bg-secondary-subtle text-secondary-emphasis border">Mobile (Flutter)</span></td>
+              <td><span class="badge bg-success">Đang thực tập</span></td>
+              <td>
+                <select class="form-select form-select-sm select-mentor" onchange="onMentorChange('TTS003')">
+                  <option value="" selected>-- Chưa phân công --</option>
+                  <option value="M01">Trần Hoàng Nam (Senior Frontend)</option>
+                  <option value="M02">Lê Thị Mai (Tech Lead)</option>
+                  <option value="M03">Phạm Quốc Bảo (Senior Backend)</option>
+                  <option value="M04">Võ Hoài An (DevOps)</option>
+                </select>
+              </td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-outline-success" onclick="saveRow('TTS003')">
+                  <i class="bi bi-check-lg"></i> Lưu
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast thông báo kết quả -->
+  <div class="toast-container">
+    <div id="saveToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body" id="toastMessage">
+          <i class="bi bi-check-circle-fill me-2"></i>Đã cập nhật thành công!
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- JavaScript xử lý sự kiện Lưu -->
+  <script>
+    // Hàm hiển thị Toast thông báo
+    function showNotification(msg) {
+      const toastEl = document.getElementById('saveToast');
+      document.getElementById('toastMessage').innerHTML = `<i class="bi bi-check-circle-fill me-2"></i>${msg}`;
+      const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+      toast.show();
+    }
+
+    // Khi người dùng thay đổi dropdown mentor
+    function onMentorChange(internId) {
+      const row = document.querySelector(`tr[data-id="${internId}"]`);
+      if (row) {
+        row.classList.add('row-changed');
+      }
+    }
+
+    // 1. Lưu theo từng dòng
+    function saveRow(internId) {
+      const row = document.querySelector(`tr[data-id="${internId}"]`);
+      if (!row) return;
+
+      const internName = row.querySelector('.fw-bold').innerText;
+      const select = row.querySelector('.select-mentor');
+      const selectedMentorId = select.value;
+      const selectedMentorName = select.options[select.selectedIndex].text;
+
+      // Chuẩn bị dữ liệu gửi lên Server (API)
+      const dataToSend = {
+        internId: internId,
+        mentorId: selectedMentorId
+      };
+
+      console.log('Đang gửi dữ liệu API (1 thực tập sinh):', dataToSend);
+
+      /*
+      // Ví dụ gọi API thực tế qua fetch:
+      fetch('/api/interns/assign-mentor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dataToSend)
+      })
+      .then(response => response.json())
+      .then(data => { ... });
+      */
+
+      // Đánh dấu đã lưu (bỏ viền highlight thay đổi)
+      row.classList.remove('row-changed');
+
+      // Thông báo cho người dùng
+      showNotification(`Đã lưu Mentor cho thực tập sinh <b>${internName}</b> thành công!`);
+    }
+
+    // 2. Lưu toàn bộ bảng (Lưu tất cả thay đổi)
+    function saveAll() {
+      const rows = document.querySelectorAll('#internTableBody tr');
+      const payload = [];
+
+      rows.forEach(row => {
+        const internId = row.getAttribute('data-id');
+        const mentorId = row.querySelector('.select-mentor').value;
+
+        payload.push({
+          internId: internId,
+          mentorId: mentorId
+        });
+
+        // Bỏ màu highlight
+        row.classList.remove('row-changed');
+      });
+
+      console.log('Đang gửi dữ liệu API (Toàn bộ danh sách):', payload);
+
+      // Thông báo
+      showNotification(`Đã lưu phân công Mentor cho tất cả <b>${payload.length}</b> thực tập sinh!`);
+    }
+  </script>
+</body>
+</html>
